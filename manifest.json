@@ -1,0 +1,23 @@
+{
+  "manifest_version": 2,
+
+  "name": "Chokkura extension",
+  "description": "Connect to your redmine",
+  "version": "1.0",
+
+  "background": {
+    "page": "background.html"
+  },
+  "permissions": [
+    "alarms",
+  "tabs",
+  "background",
+  "notifications" 
+
+    ], 
+  "browser_action": {
+    "default_icon": "icon_g.png",
+    "default_popup": "popup.html"
+  },
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
+}
