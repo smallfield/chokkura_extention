@@ -5,8 +5,9 @@ var ChokkuraGenerator = {
     $.getJSON(this.issuesOnRedmine_, function(json){
       var issues = json['issues'];
       console.log(issues);
-      chrome.browserAction.setBadgeText({text : ''});
 
+      // NEW の表示を消す
+      chrome.browserAction.setBadgeText({text : ''});
 
       $(issues).each(function(){
         var prefix = ""
@@ -28,9 +29,6 @@ var ChokkuraGenerator = {
         localStorage['last_id'] = issues[0].id;
       }
     });
-
-    // NEW icon
-
   },
 
   checkNewIssue: function() {
@@ -61,19 +59,15 @@ var ChokkuraGenerator = {
         var opt = {
           type: "basic",
       title: "新しいお願いがあります！！",
-      message: issues[0]["subject"],
+      message: issues[0]["author"]["name"] +"さんが、『" + issues[0]["subject"] + "』とお願いしています。" ,
       iconUrl: "icon_g.png"
         }
         chrome.browserAction.setBadgeText({text : 'NEW'});
-        chrome.notifications.create("id1", opt, function(){console.log("done");});
+//        chrome.notifications.create(new Date().getTime() + "_", opt, function(){console.log("done");});
+        chrome.notifications.create("_", opt, function(){console.log("done");});
       }
-
     });
-
-
   }
-
-
 };
 
 
