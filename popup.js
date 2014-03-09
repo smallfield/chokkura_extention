@@ -64,17 +64,21 @@ var ChokkuraGenerator = {
         }
         chrome.browserAction.setBadgeText({text : 'NEW'});
         
-        // 既存の通知削除
-        chrome.notifications.clear(String(issues[0]["id"]), function(){console.log("done");});
+       // chrome.notifications.getAll(function(notices) {
+        //  console.log(notices);
+          //if(!notices.indexOf(issues[0]["id"]) > -1 ) {
+            // 新しい通知
+            
+            // 通知実施
+            chrome.notifications.create(String(issues[0]["id"]), opt, function(){console.log("done");});
 
-        // 通知実施
-        chrome.notifications.create(String(issues[0]["id"]), opt, function(){console.log("done");});
-
-        // 通知クリックでそのチケットに飛ぶようにリスナセット
-        chrome.notifications.onClicked.addListener(function (id) {
-          chrome.tabs.create({url: "http://54.199.166.1/redmine/issues/" + id});
-          chrome.notifications.clear(String(id), function (){console.log("done");});
-        });
+            // 通知クリックでそのチケットに飛ぶようにリスナセット
+            chrome.notifications.onClicked.addListener(function (id) {
+              chrome.tabs.create({url: "http://54.199.166.1/redmine/issues/" + id});
+              chrome.notifications.clear(String(id), function (){console.log("done");});
+            });
+         // }
+      //  });
       }
     });
   }
