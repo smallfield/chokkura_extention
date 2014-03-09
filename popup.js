@@ -15,7 +15,7 @@ var ChokkuraGenerator = {
           // new ticket arrives!
           prefix = "NEW!! ";
         }
-      var para = "<li><a href='http://54.199.166.1/redmine/issues/"+this.id+"'>"+ prefix + this.subject+"</a> by"+this.author.name+"</li>";
+      var para = "<li><a onClick='openIssue(" + this.id + ")' href='http://54.199.166.1/redmine/issues/"+this.id+"'>"+ prefix + this.subject+"</a> <span class='small'>by"+this.author.name+"</span></li>";
       $(para).appendTo("#main");
       });
 
@@ -60,15 +60,27 @@ var ChokkuraGenerator = {
           type: "basic",
       title: "新しいお願いがあります！！",
       message: issues[0]["author"]["name"] +"さんが、『" + issues[0]["subject"] + "』とお願いしています。" ,
-      iconUrl: "icon_g.png"
+      iconUrl: "icon_g2.png"
         }
         chrome.browserAction.setBadgeText({text : 'NEW'});
-//        chrome.notifications.create(new Date().getTime() + "_", opt, function(){console.log("done");});
-        chrome.notifications.create("_", opt, function(){console.log("done");});
+        
+        // 既存の通知削除
+        chrome.notifications.clear(String(issues[0]["id"]), function(){console.log("done");});
+
+        // 通知実施
+        chrome.notifications.create(String(issues[0]["id"]), opt, function(){console.log("done");});
+
+        // 通知クリックでそのチケットに飛ぶようにリスナセット
+        chrome.notifications.onClicked.addListener(function (id) {
+          chrome.tabs.create({url: "http://54.199.166.1/redmine/issues/" + id});
+          chrome.notifications.clear(String(id), function (){console.log("done");});
+        });
       }
     });
   }
 };
+
+
 
 
 
@@ -77,6 +89,9 @@ $(function(){
 });
 
 
+function openIssue(id) {
+  chrome.tabs.create({url: "http://54.199.166.1/redmine/issues/" + this.id });
+}
 
 
 
